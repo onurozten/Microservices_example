@@ -1,9 +1,32 @@
+using MassTransit;
+using Microservices.PhoneBook.Consumers;
 using Microservices.PhoneBook.Data;
 using Microservices.PhoneBook.Services;
 using Microservices.Shared.Enums;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddMassTransit(x =>
+{
+    x.AddConsumer<ReportRequestedEventConsumer>();
+
+    x.UsingRabbitMq((context, cfg) =>
+    {
+        var a = builder.Configuration["RabbitMQUrl"];
+        // Default port 5672
+        cfg.Host(builder.Configuration["RabbitMQUrl"], "/", host =>
+        {
+            host.Username("guest");
+            host.Password("guest");
+        });
+
+        cfg.ReceiveEndpoint("report-requested-event-report-service", e =>
+        {
+            e.ConfigureConsumer<ReportRequestedEventConsumer>(context);
+        });
+
+    });
+});
 
 // Add services to the container.
 
