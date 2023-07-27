@@ -9,6 +9,10 @@ namespace Microservices.PhoneBook
         public Mappings()
         {
             CreateMap<Person, PersonDto>().ReverseMap();
+            CreateMap<ContactInfo, ContactInfoDto>().ReverseMap();
+
+            CreateMap<Person, PersonCreateDto>().ReverseMap();
+            CreateMap<ContactInfo, ContactCreateDto>().ReverseMap();
         }
     }
 }

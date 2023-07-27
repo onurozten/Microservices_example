@@ -1,14 +1,13 @@
-﻿using Microservices.Shared.Enums;
-using System.ComponentModel.DataAnnotations;
+using Microservices.Shared.Enums;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Microservices.PhoneBook.Data
+namespace Microservices.Web.Models
 {
-    public class ContactInfo
+    public class ContactInfoVm
     {
         public int Id { get; set; }
 
-        public Person Person { get; set; }
+        public PersonVm Person { get; set; }
 
         public string PersonId { get; set; }
 
@@ -28,6 +27,5 @@ namespace Microservices.PhoneBook.Data
         }
 
         public string ContactContent { get; set; }
-
     }
 }

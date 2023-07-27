@@ -1,4 +1,4 @@
-﻿namespace Microservices.PhoneBook.Enums
+﻿namespace Microservices.Shared.Enums
 {
     public enum ContactType
     {

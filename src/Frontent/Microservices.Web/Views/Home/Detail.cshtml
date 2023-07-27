@@ -1,0 +1,59 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+    @model PersonVm
+}
+
+
+<div class="card mt-5">
+    <div class="card-body">
+        <h5 class="card-title">Telefon Rehberi / @Model.Name @Model.Surname</h5>
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                    <th scope="col">İletişim Türü</th>
+                    <th scope="col">Bilgi</th>
+                    <th scope="col">İşlemler</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.ContactInfos)
+                    {
+                        <tr>
+                            <th scope="row">@item.Id</th>
+                        <td>@item.ContactType.ToString()</td>
+                        <td>@item.ContactContent</td>
+                        <td> <a href="@Url.Action("deletedetail","home", new {id=item.Id, personId = item.PersonId})">Sil</a></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+    </div>
+</div>
+
+
+<div class="card mt-5">
+    <div class="card-body">
+        <h5 class="card-title">Yeni İletişim Bilgisi Ekle</h5>
+
+        <form asp-controller="Home" asp-action="CreateDetail">
+            <input type="hidden" value="@Model.Id" name="PersonId"/>
+            <div class="form-group">
+                <label for="exampleInputEmail1">İletişim Türü</label>
+                <select class="form-control" name="ContactTypeId">
+                    @foreach (ContactType contactType in (ContactType[])Enum.GetValues(typeof(ContactType)))
+                    {
+                        <option value="@((int)contactType)">@contactType.ToString()</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="exampleInputEmail1">İletişim Bilgisi</label>
+                <input required class="form-control" placeholder="Soyismi giriniz" name="ContactContent">
+            </div>
+            <button type="submit" class="btn btn-primary mt-4">Kaydet</button>
+        </form>
+    </div>
+</div>

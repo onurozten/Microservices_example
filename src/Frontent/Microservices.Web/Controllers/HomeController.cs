@@ -20,6 +20,37 @@ namespace Microservices.Web.Controllers
             return View(people);
         }
 
+        public async Task<IActionResult> Delete(string id)
+        {
+            await _personService.DeleteById(id);
+            return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> Detail(string id)
+        {
+            var people = await _personService.GetById(id);
+            return View(people);
+        }
+
+        public async Task<IActionResult> Create(PersonCreateDto createVm)
+        {
+            await _personService.Create(createVm);
+            return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> CreateDetail(ContactCreateModel createDto)
+        {
+            await _personService.CreateDetail(createDto);
+            return RedirectToAction(nameof(Detail), new {id = createDto.PersonId});
+        }
+
+
+        public async Task<IActionResult> DeleteDetail(int id, string personId)
+        {
+            await _personService.DeleteDetailById(id);
+            return RedirectToAction(nameof(Detail), new {id = personId});
+        }
+
 
     }
 }

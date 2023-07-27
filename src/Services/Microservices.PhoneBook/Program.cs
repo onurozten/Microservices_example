@@ -1,8 +1,7 @@
 using Microservices.PhoneBook.Data;
 using Microservices.PhoneBook.Services;
-using Microsoft.AspNetCore.Identity;
+using Microservices.Shared.Enums;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Hosting;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -42,7 +41,25 @@ using (var scope = app.Services.CreateScope())
             Id = Guid.NewGuid().ToString(),
             Name = "Eren",
             Surname = "Özten",
-            Company = "Contoso University"
+            Company = "Contoso University",
+            ContactInfos = new List<ContactInfo>
+            {
+                new ContactInfo
+                {
+                    ContactType = ContactType.Phone,
+                    ContactContent = "5129898569"
+                },
+                new ContactInfo
+                {
+                    ContactType = ContactType.Email,
+                    ContactContent = "eren@eren.com"
+                },
+                new ContactInfo
+                {
+                    ContactType = ContactType.Location,
+                    ContactContent = "İSTANBUL"
+                }
+            }
         });
 
         appDbContext.People.Add(new Person
@@ -50,7 +67,20 @@ using (var scope = app.Services.CreateScope())
             Id = Guid.NewGuid().ToString(),
             Name = "Kerim",
             Surname = "Balkan",
-            Company = "Anadolu University"
+            Company = "Anadolu University",
+            ContactInfos = new List<ContactInfo>
+            {
+                new ContactInfo
+                {
+                    ContactType = ContactType.Email,
+                    ContactContent = "kerim@kerim.com"
+                },
+                new ContactInfo
+                {
+                    ContactType = ContactType.Location,
+                    ContactContent = "İSTANBUL"
+                }
+            }
         });
 
         appDbContext.People.Add(new Person
@@ -58,7 +88,25 @@ using (var scope = app.Services.CreateScope())
             Id = Guid.NewGuid().ToString(),
             Name = "Sevim",
             Surname = "Güler",
-            Company = "Software Company"
+            Company = "Software Company",
+            ContactInfos = new List<ContactInfo>
+            {
+                new ContactInfo
+                {
+                    ContactType = ContactType.Phone,
+                    ContactContent = "5965487236"
+                },
+                new ContactInfo
+                {
+                    ContactType = ContactType.Email,
+                    ContactContent = "sevim@sevim.com"
+                },
+                new ContactInfo
+                {
+                    ContactType = ContactType.Location,
+                    ContactContent = "ANKARA"
+                }
+            }
         });
 
         appDbContext.People.Add(new Person

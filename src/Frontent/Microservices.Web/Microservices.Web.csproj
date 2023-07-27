@@ -10,4 +10,8 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="7.0.9" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Shared\Microservices.Shared\Microservices.Shared.csproj" />
+  </ItemGroup>
+
 </Project>

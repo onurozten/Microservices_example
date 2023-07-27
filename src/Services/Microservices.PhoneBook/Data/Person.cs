@@ -13,5 +13,7 @@ namespace Microservices.PhoneBook.Data
 
         public string Company { get; set; }
 
+        public ICollection<ContactInfo> ContactInfos { get; set; } = new List<ContactInfo>();
+
     }
 }
