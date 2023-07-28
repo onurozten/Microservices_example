@@ -1,0 +1,71 @@
+version: "3.8"
+services:
+  reportdb:
+    container_name: reportdb
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - report_volume:/data/db
+  phonebookdb:
+    container_name: phonebookdb
+    restart: always
+    ports:
+      - "5432:5432"
+    volumes:
+      - phonebook_volume:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=appuser
+      - POSTGRES_PASSWORD=secret
+      - POSTGRES_DB=PhonebookDb
+  rabbitmq:
+    container_name: rabbitmq
+    restart: always
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+  phonebook.api:
+    container_name: phonebook.api
+    restart: on-failure
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - RabbitMQUrl=rabbitmq
+      - ConnectionStrings:DefaultConnection=User ID=appuser;Password=secret;Server=phonebookdb; Port=5432; Database=PhonebookDb; Integrated Security=true; Pooling=true
+    ports:
+      - "6011:80"
+    depends_on:
+      - rabbitmq
+      - phonebookdb
+  reporter.api:
+    container_name: reporter.api
+    restart: on-failure
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - RabbitMQUrl=rabbitmq
+      - DatabaseSettings:ConnectionString=mongodb://reportdb:27017
+    ports:
+      - "6012:80"
+    depends_on:
+      - rabbitmq
+      - reportdb
+  gateway.api:
+    container_name: gateway.api
+    restart: on-failure
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+    ports:
+      - "6000:80"
+  aspnetcoremvc.web:
+    container_name: aspnetcoremvc.web
+    restart: on-failure
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ServiceApiSettings:GetawayBaseUri=http://gateway.api
+      - RabbitMQUrl=rabbitmq
+    ports:
+      - "6010:80"
+    depends_on:
+      - gateway.api
+      - rabbitmq
+      - phonebook.api
+      - reporter.api

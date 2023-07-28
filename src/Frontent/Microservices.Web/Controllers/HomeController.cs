@@ -3,17 +3,21 @@ using Microservices.Shared.Messages;
 using Microservices.Web.Models;
 using Microservices.Web.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using System.Diagnostics;
+using System.Text.Json;
 
 namespace Microservices.Web.Controllers
 {
     public class HomeController : Controller
     {
         private readonly IPersonService _personService;
+        private readonly IConfiguration _configuration;
 
-        public HomeController(IPersonService personService)
+        public HomeController(IPersonService personService, IConfiguration configuration)
         {
             _personService = personService;
+            _configuration = configuration;
         }
 
         public async Task<IActionResult> Index()

@@ -1,0 +1,32 @@
+version: "3.8"
+services:
+  reportdb:
+    image: mongo
+  phonebookdb:
+    image: postgres
+  rabbitmq:
+    image: rabbitmq:3-management
+  phonebook.api:
+    image: phonebook_api_image
+    build:
+      context: .
+      dockerfile: Services/Microservices.Phonebook/Dockerfile
+  reporter.api:
+    image: reporter_api_image
+    build:
+      context: .
+      dockerfile: Services/Microservices.Reporter/Dockerfile
+  gateway.api:
+    image: gateway_api_image
+    build:
+      context: .
+      dockerfile: Gateways/Microservices.WebGateway/Dockerfile
+  aspnetcoremvc.web:
+    image: aspnetcoremvc_image
+    build:
+      context: .
+      dockerfile: Frontent/Microservices.Web/Dockerfile
+
+volumes:
+  report_volume:
+  phonebook_volume:

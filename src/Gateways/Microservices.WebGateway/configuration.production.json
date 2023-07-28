@@ -1,0 +1,36 @@
+{
+  "Routes": [
+    {
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "phonebook.api",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/services/phonebook/{everything}",
+      "UpstreamHttpMethod": ["Get", "Post", "Put", "Delete"],
+      "UpstreamScheme": "http"
+    },
+    {
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "reporter.api",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/services/reporter/{everything}",
+      "UpstreamHttpMethod": ["Get", "Post", "Put", "Delete"],
+      "UpstreamScheme": "http",
+      "AuthenticationOptions": {}
+    }
+  ],
+
+  "GlobalConfiguration": {
+    "BaseUrl": "http://gateway.api",
+    "RequestIdKey": "ot-traceid"
+  }
+}
