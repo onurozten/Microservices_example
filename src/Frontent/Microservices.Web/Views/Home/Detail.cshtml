@@ -38,7 +38,7 @@
     <div class="card-body">
         <h5 class="card-title">Yeni İletişim Bilgisi Ekle</h5>
 
-        <form asp-controller="Home" asp-action="CreateDetail">
+        <form asp-controller="Home" asp-action="CreateDetail" method="post">
             <input type="hidden" value="@Model.Id" name="PersonId"/>
             <div class="form-group">
                 <label for="exampleInputEmail1">İletişim Türü</label>

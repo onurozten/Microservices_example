@@ -34,12 +34,14 @@ namespace Microservices.Web.Controllers
             return View(people);
         }
 
+        [HttpPost]
         public async Task<IActionResult> Create(PersonCreateDto createVm)
         {
             await _personService.Create(createVm);
             return RedirectToAction(nameof(Index));
         }
 
+        [HttpPost]
         public async Task<IActionResult> CreateDetail(ContactCreateModel createDto)
         {
             await _personService.CreateDetail(createDto);
