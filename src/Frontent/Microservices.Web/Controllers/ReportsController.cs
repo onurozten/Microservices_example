@@ -5,7 +5,6 @@ namespace Microservices.Web.Controllers
 {
     public class ReportsController : Controller
     {
-        private readonly IPersonService _personService;
         private readonly IReportService _reportService;
 
         public ReportsController(IReportService reportService)
@@ -17,6 +16,13 @@ namespace Microservices.Web.Controllers
         {
             var reports = await _reportService.GetAll();
             return View(reports);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create(string location)
+        {
+            var reports = await _reportService.GenerateReport(location);
+            return RedirectToAction(nameof(Index));
         }
 
     }

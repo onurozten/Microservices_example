@@ -1,5 +1,6 @@
 ﻿using MassTransit;
 using Microservices.Reporter.Model;
+using Microservices.Shared.Enums;
 using Microservices.Shared.Messages;
 using Microservices.Shared.Models;
 using Microsoft.Extensions.Options;
@@ -22,15 +23,14 @@ namespace Microservices.Reporter.Consumers
 
         public async Task Consume(ConsumeContext<ReportFinishedEvent> context)
         {
-            var newReport = new Report{ 
-                FinishedAd = DateTime.Now,
-                Location = context.Message.Location,
-                LocationCount = context.Message.LocationCount,
-                PhoneCount = context.Message.PhoneCount,
-                StaredAt = context.Message.StaredAt
-            };
+            var reportToUpdate = await _reportCollection.Find(x => x.Id == context.Message.ReportId).FirstOrDefaultAsync();
+            reportToUpdate.FinishedAd = DateTime.Now;
+            reportToUpdate.Location = context.Message.Location;
+            reportToUpdate.LocationCount = context.Message.LocationCount;
+            reportToUpdate.PhoneCount = context.Message.PhoneCount;
+            reportToUpdate.ReportState = (int)ReportState.Completed;
 
-            await _reportCollection.InsertOneAsync(newReport);
+            await _reportCollection.FindOneAndReplaceAsync(x => x.Id == reportToUpdate.Id, reportToUpdate);
         }
     }
 }

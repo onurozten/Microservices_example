@@ -20,5 +20,12 @@ namespace Microservices.Reporter.Controllers
             var reports = await _reportService.GetAllReports();
             return Ok(reports);
         }
+
+        [HttpGet("[action]")]
+        public async Task<IActionResult> CreateEmptyReport(string location)
+        {
+            var reportId = await _reportService.CreateEmptyReport(location);
+            return Ok(reportId);
+        }
     }
 }

@@ -1,8 +1,10 @@
 ﻿using MassTransit;
 using MassTransit.Transports;
 using Microservices.PhoneBook.Data;
+using Microservices.PhoneBook.Helper;
 using Microservices.Shared.Enums;
 using Microservices.Shared.Messages;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,43 +21,19 @@ namespace Microservices.PhoneBook.Consumers
             _dbContext = dbContext;
             _publishEndpoint = publishEndpoint;
         }
+
         public async Task Consume(ConsumeContext<ReportRequestedEvent> context)
         {
-            var start = DateTime.Now;
             var location = context.Message.Location;
 
-            var peopleAtLocation = await (from u in _dbContext.People
-                                          join c in _dbContext.ContactInfos
-                                          on u.Id equals c.PersonId
-                                          where c.ContactContent == location
-                                          select u)
-                                            .Include(x => x.ContactInfos)
-                                            .ToListAsync();
+            PhoneBookHelper.CountLocationAndPhones(_dbContext, location, out var count, out var phoneCount);
 
-            var phoneCount = 0;
-            foreach (var item in peopleAtLocation)
-            {
-                foreach (var c in item.ContactInfos)
-                {
-                    if (c.ContactTypeId == (int)ContactType.Phone)
-                        phoneCount++;
-                }
-            }
-
-            var result = new
-            {
-                located = peopleAtLocation,
-                locatedPhoneNumber = phoneCount
-            };
-
-            var end = DateTime.Now;
-            await _publishEndpoint.Publish<ReportFinishedEvent>(new ReportFinishedEvent
+            await _publishEndpoint.Publish(new ReportFinishedEvent
             { 
-                LocationCount = peopleAtLocation.Count(),
+                ReportId = context.Message.ReportId,
+                Location = location,
+                LocationCount = count,
                 PhoneCount = phoneCount,
-                StaredAt = start,
-                FinishedAd = end,
-                Location = location 
             });
 
         }

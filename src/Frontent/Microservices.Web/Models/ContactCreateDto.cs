@@ -1,6 +1,3 @@
-using Microservices.Shared.Enums;
-using System.ComponentModel.DataAnnotations.Schema;
-
 namespace Microservices.Web.Models
 {
     public class ContactCreateModel

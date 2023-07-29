@@ -34,9 +34,6 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
-///////////////////////
-
 builder.Services.AddAutoMapper(typeof(Program));
 
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -45,27 +42,27 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddScoped<IPersonService, PersonService>();
 
 
-
-
-//////////////////////
-
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
 {
     var serviceProvider = scope.ServiceProvider;
-    var appDbContext = serviceProvider.GetRequiredService<AppDbContext>();
-    appDbContext.Database.Migrate();
+    var dbContext = serviceProvider.GetRequiredService<AppDbContext>();
+    dbContext.Database.Migrate();
 
-    if (!appDbContext.People.Any())
+    if (!dbContext.People.Any())
+        SeedData(dbContext);
+}
+
+void SeedData(AppDbContext dbContext)
+{
+    dbContext.People.Add(new Person
     {
-        appDbContext.People.Add(new Person
-        {
-            Id = Guid.NewGuid().ToString(),
-            Name = "Eren",
-            Surname = "Özten",
-            Company = "Contoso University",
-            ContactInfos = new List<ContactInfo>
+        Id = Guid.NewGuid().ToString(),
+        Name = "Eren",
+        Surname = "Özten",
+        Company = "Contoso University",
+        ContactInfos = new List<ContactInfo>
             {
                 new ContactInfo
                 {
@@ -83,15 +80,15 @@ using (var scope = app.Services.CreateScope())
                     ContactContent = "İSTANBUL"
                 }
             }
-        });
+    });
 
-        appDbContext.People.Add(new Person
-        {
-            Id = Guid.NewGuid().ToString(),
-            Name = "Kerim",
-            Surname = "Balkan",
-            Company = "Anadolu University",
-            ContactInfos = new List<ContactInfo>
+    dbContext.People.Add(new Person
+    {
+        Id = Guid.NewGuid().ToString(),
+        Name = "Kerim",
+        Surname = "Balkan",
+        Company = "Anadolu University",
+        ContactInfos = new List<ContactInfo>
             {
                 new ContactInfo
                 {
@@ -104,15 +101,15 @@ using (var scope = app.Services.CreateScope())
                     ContactContent = "İSTANBUL"
                 }
             }
-        });
+    });
 
-        appDbContext.People.Add(new Person
-        {
-            Id = Guid.NewGuid().ToString(),
-            Name = "Sevim",
-            Surname = "Güler",
-            Company = "Software Company",
-            ContactInfos = new List<ContactInfo>
+    dbContext.People.Add(new Person
+    {
+        Id = Guid.NewGuid().ToString(),
+        Name = "Sevim",
+        Surname = "Güler",
+        Company = "Software Company",
+        ContactInfos = new List<ContactInfo>
             {
                 new ContactInfo
                 {
@@ -130,20 +127,18 @@ using (var scope = app.Services.CreateScope())
                     ContactContent = "ANKARA"
                 }
             }
-        });
+    });
 
-        appDbContext.People.Add(new Person
-        {
-            Id = Guid.NewGuid().ToString(),
-            Name = "Onur",
-            Surname = "Özten",
-            Company = "Another Software Company"
-        });
+    dbContext.People.Add(new Person
+    {
+        Id = Guid.NewGuid().ToString(),
+        Name = "Onur",
+        Surname = "Özten",
+        Company = "Another Software Company"
+    });
 
-        appDbContext.SaveChanges();
-    }
+    dbContext.SaveChanges();
 }
-
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

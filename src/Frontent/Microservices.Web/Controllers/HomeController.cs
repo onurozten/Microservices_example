@@ -1,11 +1,6 @@
-﻿using MassTransit;
-using Microservices.Shared.Messages;
-using Microservices.Web.Models;
+﻿using Microservices.Web.Models;
 using Microservices.Web.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
-using System.Diagnostics;
-using System.Text.Json;
 
 namespace Microservices.Web.Controllers
 {

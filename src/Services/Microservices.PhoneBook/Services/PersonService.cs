@@ -44,7 +44,7 @@ namespace Microservices.PhoneBook.Services
             if (person != null)
             {
                 _dbContext.People.Remove(person);
-                _dbContext.SaveChanges();
+                await _dbContext.SaveChangesAsync();
             }
         }
 
@@ -54,7 +54,7 @@ namespace Microservices.PhoneBook.Services
             person.Id = Guid.NewGuid().ToString();  // default value olabilir mi?
 
             _dbContext.People.Add(person);
-            _dbContext.SaveChanges();
+            await _dbContext.SaveChangesAsync();
         }
 
         public async Task CreateDetail(ContactCreateDto createDto)
@@ -62,7 +62,7 @@ namespace Microservices.PhoneBook.Services
             var contactInfo = _mapper.Map<ContactInfo>(createDto);
 
             _dbContext.ContactInfos.Add(contactInfo);
-            _dbContext.SaveChanges();
+            await _dbContext.SaveChangesAsync();
         }
 
         public async Task DeleteDetailById(int id)
@@ -73,7 +73,7 @@ namespace Microservices.PhoneBook.Services
             if (contactInfo != null)
             {
                 _dbContext.ContactInfos.Remove(contactInfo);
-                _dbContext.SaveChanges();
+                await _dbContext.SaveChangesAsync();
             }
         }
     }

@@ -5,6 +5,7 @@ namespace Microservices.Shared.Models
 {
     public class Report
     {
+
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
@@ -18,5 +19,8 @@ namespace Microservices.Shared.Models
         public DateTime? FinishedAd { get; set; }
         public int LocationCount { get; set; }
         public int PhoneCount { get; set; }
+
+        public int ReportState { get; set; }
+
     }
 }
