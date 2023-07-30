@@ -1,6 +1,8 @@
+using FluentValidation;
 using MassTransit;
 using Microservices.PhoneBook.Consumers;
 using Microservices.PhoneBook.Data;
+using Microservices.PhoneBook.Dtos;
 using Microservices.PhoneBook.Services;
 using Microservices.Shared.Enums;
 using Microsoft.EntityFrameworkCore;
@@ -29,8 +31,8 @@ builder.Services.AddMassTransit(x =>
 });
 
 // Add services to the container.
-
 builder.Services.AddControllers();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -40,6 +42,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
             options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddScoped<IPersonService, PersonService>();
+builder.Services.AddValidatorsFromAssemblyContaining<ContactCreateDtoValidator>();
 
 
 var app = builder.Build();

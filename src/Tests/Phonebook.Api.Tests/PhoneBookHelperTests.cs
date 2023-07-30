@@ -1,31 +1,26 @@
+using Microsoft.EntityFrameworkCore;
 using Microservices.PhoneBook.Data;
 using Microservices.PhoneBook.Helper;
 using Microservices.Shared.Enums;
-using Microsoft.EntityFrameworkCore;
+using FluentAssertions;
 
 namespace Phonebook.Tests
 {
-    [TestClass]
-    public class PhoneBookTest
+    public class PhoneBookHelperTests
     {
-        private readonly AppDbContext _dbContext;
-
-        public PhoneBookTest()
+        [Fact]
+        public void CountLocationAndPhones_Should_Return_Correct_Counts()
         {
+            // arrange
             var options = new DbContextOptionsBuilder<AppDbContext>()
-                            .UseInMemoryDatabase(databaseName: "InMemoryPhonebookDb")
-                            .Options;
+                   .UseInMemoryDatabase(databaseName: "InMemoryPhonebookDb").Options;
 
-            _dbContext = new AppDbContext(options);
-        }
+            var _dbContext = new AppDbContext(options);
 
-        [TestMethod]
-        public void people_location_and_phonecount_test()
-        {
             var location = "İSTANBUL";
 
             PhoneBookHelper.CountLocationAndPhones(_dbContext, location, out var peopleCount, out var peopleCountWithPhone);
-            Assert.AreEqual(0, peopleCount);
+            peopleCount.Should().Be(0);
 
             _dbContext.People.Add(new Person
             {
@@ -45,8 +40,9 @@ namespace Phonebook.Tests
 
             _dbContext.SaveChanges();
             PhoneBookHelper.CountLocationAndPhones(_dbContext, location, out peopleCount, out peopleCountWithPhone);
-            Assert.AreEqual(1, peopleCount);
-            Assert.AreEqual(0, peopleCountWithPhone);
+
+            peopleCount.Should().Be(1);
+            peopleCountWithPhone.Should().Be(0);
 
             _dbContext.People.Add(new Person
             {
@@ -71,8 +67,14 @@ namespace Phonebook.Tests
 
             _dbContext.SaveChanges();
             PhoneBookHelper.CountLocationAndPhones(_dbContext, location, out peopleCount, out peopleCountWithPhone);
-            Assert.AreEqual(2, peopleCount);
-            Assert.AreEqual(1, peopleCountWithPhone);
+
+            peopleCount.Should().Be(2);
+            peopleCountWithPhone.Should().Be(1);
+
+            //Assert.Equal(2, peopleCount);
+            //Assert.Equal(1, peopleCountWithPhone);
+
         }
     }
 }
+    

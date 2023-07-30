@@ -1,12 +1,7 @@
 ﻿using MassTransit;
-using MassTransit.Transports;
 using Microservices.PhoneBook.Data;
 using Microservices.PhoneBook.Helper;
-using Microservices.Shared.Enums;
 using Microservices.Shared.Messages;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 
 namespace Microservices.PhoneBook.Consumers
 {

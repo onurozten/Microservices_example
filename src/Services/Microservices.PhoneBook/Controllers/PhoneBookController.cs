@@ -53,6 +53,9 @@ namespace Microservices.PhoneBook.Controllers
         [HttpDelete("[action]/{id}")]
         public async Task<IActionResult> DeleteDetailById(int id)
         {
+            if (id == default || id < 0)
+                return BadRequest();
+
             await _personService.DeleteDetailById(id);
             return Ok();
         }
